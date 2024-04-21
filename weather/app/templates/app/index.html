@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-image: linear-gradient(135deg, #92a8d1 0%, #03446a 100%);
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 32px;
+            margin-bottom: 30px;
+            color: #333;
+            text-align: center;
+        }
+
+        form {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        input[type="text"] {
+            width: 70%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus {
+            border-color: #007bff;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: #007bff;
+            color: #fff;
+            text-transform: uppercase;
+            font-size: 14px;
+        }
+
+        tr:hover {
+            background-color: #f2f2f2;
+        }
+
+        .search-history {
+            margin-top: 30px;
+        }
+
+        .search-history h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333;
+            text-align: center;
+        }
+
+        .search-history p {
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: #666;
+            text-align: center;
+        }
+
+        .no-history {
+            font-style: italic;
+            color: #888;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Weather App</h1>
+    <form method="post">
+        {% csrf_token %}
+        <input type="text" name="city" id="locationInput" placeholder="Enter a city" required>
+        <button type="submit" id="searchButton">Search</button>
+    </form>
+    {% if country_code %}
+    <div class="weather-info">
+        <h2>Weather in {{ city }}</h2>
+        <table>
+            <tr>
+                <th>Attribute</th>
+                <th>Value</th>
+            </tr>
+            <tr>
+                <td>Country Code</td>
+                <td>{{ country_code }}</td>
+            </tr>
+            <tr>
+                <td>Coordinates</td>
+                <td>{{ coordinate }}</td>
+            </tr>
+            <tr>
+                <td>Temperature</td>
+                <td>{{ temp }}</td>
+            </tr>
+            <tr>
+                <td>Pressure</td>
+                <td>{{ pressure }}</td>
+            </tr>
+            <tr>
+                <td>Humidity</td>
+                <td>{{ humidity }}</td>
+            </tr>
+        </table>
+    </div>
+    {% endif %}
+
+    <div class="search-history">
+        <h2>Search History</h2>
+        {% if search_history %}
+            <table>
+                <tr>
+                    <th>City</th>
+                    <th>Timestamp</th>
+                    <th>Country Code</th>
+                    <th>Coordinates</th>
+                    <th>Temperature</th>
+                    <th>Pressure</th>
+                    <th>Humidity</th>
+                </tr>
+                {% for item in search_history %}
+                    <tr>
+                        <td>{{ item.city }}</td>
+                        <td>{{ item.timestamp }}</td>
+                        <td>{{ item.country_code }}</td>
+                        <td>{{ item.coordinate }}</td>
+                        <td>{{ item.temperature }}</td>
+                        <td>{{ item.pressure }}</td>
+                        <td>{{ item.humidity }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <p class="no-history">No search history available.</p>
+        {% endif %}
+    </div>
+</div>
+</body>
+</html>
